@@ -15,6 +15,6 @@ def plot_images(images, maxcols=3, figsize=(20, 6), cmap='gray'):
 
 
 def plot_with_keypoints(image, keypoints, markersize=3, cmap='gray'):
-    plt.imshow(image, cmap=cmap)
-    plt.plot(keypoints[:, 0], keypoints[:, 1], '.r', markersize=markersize)
-    plt.show()
+    fig, ax = plt.subplots()
+    ax.imshow(image, cmap=cmap)
+    ax.plot(keypoints[:, 0], keypoints[:, 1], '.r', markersize=markersize)
