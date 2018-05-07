@@ -1,30 +1,27 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from math import ceil
+from skimage.feature import corner_harris, corner_peaks
 
 
 def invert_coords(coords):
     return np.array([[c[1], c[0]] for c in coords])
 
 
-def trim_coords_to_shape(shape, coords):
+def trim_coords_to_shape(shape, coords, padding=32):
     height, width = shape
-    filtered = filter(lambda c: c[0] <= width and c[1] <= height, coords)
+
+    def filter_fn(coord):
+        x, y = coord
+        return x >= padding and \
+            x <= width - padding and \
+            y >= padding and \
+            y <= height - padding
+
+    filtered = filter(filter_fn, coords)
     return np.array(list(filtered))
 
 
-def plot_images(images, maxcols=3, figsize=(20, 6), cmap='gray'):
-    n_images = len(images)
-    n_cols = n_images if n_images < maxcols else maxcols
-    n_rows = ceil(n_images / n_cols)
-
-    fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=figsize)
-
-    for ax, image in zip(axes, images):
-        ax.imshow(image, cmap=cmap)
-
-
-def plot_with_keypoints(image, keypoints, markersize=3, cmap='gray'):
-    plt.imshow(image, cmap=cmap)
-    plt.plot(keypoints[:, 0], keypoints[:, 1], '.r', markersize=markersize)
-    plt.show()
+def get_keypoints(image):
+    keypoints = corner_peaks(corner_harris(image), min_distance=5)
+    keypoints = invert_coords(keypoints)
+    keypoints = trim_coords_to_shape(image.shape, keypoints)
+    return keypoints
