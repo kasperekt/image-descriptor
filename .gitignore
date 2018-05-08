@@ -24,3 +24,6 @@ MANIFEST
 
 # Jupyter Notebook
 .ipynb_checkpoints
+
+# Local
+patches/
