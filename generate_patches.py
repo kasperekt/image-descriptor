@@ -91,10 +91,7 @@ def generate_patches(img_set, target_path):
             patch_path = path.join(target_path, '{}.png'.format(patch_name))
             imsave(patch_path, patch)
 
-    # TODO: Extract as separate function (reading and saving labels)
-    with open(path.join(target_path, 'labels.txt'), 'w') as labels_fp:
-        for patch_name, img1_patch_name in labels.items():
-            labels_fp.write('{} {}\n'.format(patch_name, img1_patch_name))
+    save_labels(labels, target_path)
 
 
 def main():
