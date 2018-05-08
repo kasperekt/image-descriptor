@@ -1,4 +1,5 @@
 import numpy as np
+import warnings
 
 from os import path, mkdir
 from shutil import rmtree
@@ -66,7 +67,9 @@ def generate_patches(img_set, target_path):
 
     for patch_name, patch in img1_patches:
         patch_path = path.join(target_path, '{}.png'.format(patch_name))
-        imsave(patch_path, patch)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            imsave(patch_path, patch)
 
     labels = {}
 
@@ -89,7 +92,9 @@ def generate_patches(img_set, target_path):
 
             # Store image
             patch_path = path.join(target_path, '{}.png'.format(patch_name))
-            imsave(patch_path, patch)
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                imsave(patch_path, patch)
 
     save_labels(labels, target_path)
 
@@ -106,12 +111,15 @@ def main():
 
     for name, extension in names:
         try:
+            print('Generating "{}" patches...'.format(name), end=' ')
             img_set = read_image_set(
                 path.join('./images', name), extension=extension)
             generate_patches(img_set, path.join('./patches', name))
+            print('Done.')
         except Exception as exception:
             print('Error generating patches from "{}" set'.format(name))
             print(exception)
+            exit(1)
 
 
 if __name__ == '__main__':
