@@ -10,7 +10,7 @@ def plot_images(images, maxcols=3, figsize=(20, 6), cmap='gray'):
 
     fig, axes = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=figsize)
 
-    for ax, image in zip(axes.flat, images):
+    for ax, image in zip(axes.flat if n_images > maxcols else axes, images):
         ax.imshow(image, cmap=cmap)
 
 

@@ -25,3 +25,10 @@ def get_keypoints(image):
     keypoints = invert_coords(keypoints)
     keypoints = trim_coords_to_shape(image.shape, keypoints)
     return keypoints
+
+
+def get_keypoints_random(image, size=150, padding=32):
+    img_h, img_w = image.shape
+    widths = np.random.uniform(padding, img_w - padding, size=(size, 1))
+    heights = np.random.uniform(padding, img_h - padding, size=(size, 1))
+    return np.hstack((widths, heights))

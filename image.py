@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def get_patch(image, keypoint, size=(16, 16)):
+def get_patch(image, keypoint, size=(32, 32)):
     ''' Z treści zadania:
     "Żaden punkt nie będzie bliżej brzegu obrazu niż 32 piksele."
     "Funkcja do wyliczenie pojedynczego deskryptora nie powinna używać okna
@@ -10,7 +10,7 @@ def get_patch(image, keypoint, size=(16, 16)):
     Dlatego nie ma sprawdzania czy obszar "patcha" wychodzi poza obraz.
     '''
     y_size, x_size = size
-    y, x = keypoint
+    x, y = keypoint
 
     left_bound = int(x - x_size // 2)
     right_bound = int(x + x_size // 2)
