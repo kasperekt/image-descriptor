@@ -15,21 +15,26 @@ class HuMomentsDescriptor:
   def extract_for_keypoint(self, image, keypoint):
     patch = get_patch(image, keypoint, size=self._patch_size)
     moments = moments_hu(patch)
-    normed_moments = -np.sign(moments)*np.log10(np.abs(moments))
+    # normed_moments = -np.sign(moments)*np.log10(np.abs(moments)) - mozliwosc znormalizowania momentow, ale czysta postac lepiej dziala na funkcji distance
 
     return moments
 
   def distance(self, desc1, desc2):
+    # nie sprawdza sie
     return spatial.distance.cosine(desc1, desc2)
 
   def distance_correlation(self, desc1, desc2):
+    # bardzo slaby
     return spatial.distance.correlation(desc1, desc2)
 
   def distance_chebyshev(self, desc1, desc2):
+    # bardzo duze wartosci, nie sprawdzalem z normalizacja
     return spatial.distance.chebyshev(desc1, desc2)
 
   def distance_canberra(self, desc1, desc2):
+    # troche gorzej jak braycurtis, brak normalizacji
     return spatial.distance.canberra(desc1, desc2)
 
   def distance_braycurtis(self, desc1, desc2):
+    # moj faworyt
     return spatial.distance.braycurtis(desc1, desc2)
