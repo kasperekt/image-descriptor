@@ -37,7 +37,7 @@ def distance(desc1, desc2):
     return distance_weighted(desc1, desc2)
 
 
-def distance_weighted(desc1, desc2, w_moments=0.9, w_exposure=0.1):
+def distance_weighted(desc1, desc2, w_moments=0.5, w_exposure=0.5):
     assert(w_moments + w_exposure == 1)
 
     hu_moments = HuMomentsDescriptor()
