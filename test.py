@@ -21,9 +21,9 @@ def calculate_distance(ref_patch_path, original_patch_path):
     return distance(ref_descriptor, original_descriptor)
 
 
-def main():
-    labels = read_labels('./patches/viewpoint-1')
-    wrong_labels = read_labels('./patches/viewpoint-2')
+def get_scores(ref_path, wrong_path):
+    labels = read_labels(ref_path)
+    wrong_labels = read_labels(wrong_path)
     wrong_zipped = zip(labels.values(), wrong_labels.values())
 
     scores = np.array([calculate_distance(r_path, o_path)
@@ -36,7 +36,30 @@ def main():
     wrong_distances = np.ones_like(wrong_scores)
     merged_distances = np.concatenate((distances, wrong_distances))
 
-    print(roc_auc_score(merged_distances, merged_scores))
+    return merged_scores, merged_distances
+
+
+def main():
+    '''Pomysł jest taki, że po lewej jest zbiór który sprawdzamy
+    '''
+    pairs = [('./patches/viewpoint-1', './patches/viewpoint-2'),
+             ('./patches/viewpoint-2', './patches/viewpoint-1'),
+             ('./patches/blur-1', './patches/blur-2'),
+             ('./patches/blur-2', './patches/blur-1'),
+             ('./patches/jpeg-compression', './patches/light'),
+             ('./patches/light', './patches/jpeg-compression'),
+             ('./patches/zoom-rotation-1', './patches/zoom-rotation-2'),
+             ('./patches/zoom-rotation-2', './patches/zoom-rotation-1')]
+
+    overall_scores = np.array([])
+    overall_distances = np.array([])
+
+    for ref_path, wrong_path in pairs:
+        scores, distances = get_scores(ref_path, wrong_path)
+        overall_scores = np.concatenate((overall_scores, scores))
+        overall_distances = np.concatenate((overall_distances, distances))
+
+    print(roc_auc_score(overall_distances, overall_scores))
 
 
 if __name__ == '__main__':
