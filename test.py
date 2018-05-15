@@ -59,6 +59,7 @@ def main():
         overall_scores = np.concatenate((overall_scores, scores))
         overall_distances = np.concatenate((overall_distances, distances))
 
+    assert(len(overall_distances) == len(overall_scores))
     print(roc_auc_score(overall_distances, overall_scores))
 
 
