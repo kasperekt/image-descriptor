@@ -1,13 +1,16 @@
 import numpy as np
-from skimage import exposure
 
 from image import get_patch
 
+from skimage import img_as_float, exposure
+from scipy.spatial.distance import cosine
+
 
 class ExposureDescriptor:
-    def __init__(self, patch_size=(32, 32)):
+    def __init__(self, patch_size=(32, 32), threshold=None):
         self._patch_size = patch_size
         self._bins = 10
+        self._thres = threshold
 
     def extract(self, image, keypoints):
         descriptors = [self.extract_for_keypoint(
@@ -16,19 +19,17 @@ class ExposureDescriptor:
 
     def extract_for_keypoint(self, image, keypoint):
         patch = get_patch(image, keypoint, size=self._patch_size)
-        histogram, _ = exposure.histogram(patch, nbins=self._bins)
+        return self.extract_for_patch(patch)
+
+    def extract_for_patch(self, patch):
+        histogram, _ = exposure.histogram(
+            img_as_float(patch), nbins=self._bins)
         return histogram
 
-    # TODO: better distance algorithm
     def distance(self, desc1, desc2):
-        smaller_desc = min([desc1, desc2], key=lambda arr: len(arr))
-        bigger_desc = max([desc1, desc2], key=lambda arr: len(arr))
+        result = cosine(desc1, desc2)
 
-        result_matrix = np.ones((len(smaller_desc), len(bigger_desc)))
+        if self._thres:
+            result = 0 if result < self._thres else 1
 
-        for i, hist1 in enumerate(smaller_desc):
-            for j, hist2 in enumerate(bigger_desc):
-                result_matrix[i, j] = np.abs(
-                    hist1 - hist2).sum() / (self._bins * 256)
-
-        return result_matrix.min(axis=0).mean()
+        return result

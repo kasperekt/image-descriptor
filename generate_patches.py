@@ -48,9 +48,16 @@ def save_labels(labels, target_path):
 
 def read_labels(labels_path):
     labels = {}
-    with open(labels_path, 'r') as labels_fp:
-        for line in labels_fp.readline():
-            print(line)
+    
+    with open(path.join(labels_path, 'labels.txt'), 'r') as labels_fp:
+        for line in labels_fp:
+            ref_path, original_path = [fname + '.png' for fname in line.strip().split(' ')]
+            ref_path = path.join(labels_path, ref_path)
+            original_path = path.join(labels_path, original_path)
+            
+            labels[ref_path] = original_path
+
+    return labels
 
 
 def generate_patches(img_set, target_path):
