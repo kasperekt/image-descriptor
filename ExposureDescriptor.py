@@ -3,7 +3,7 @@ import numpy as np
 from image import get_patch
 
 from skimage import img_as_float, exposure
-from scipy.spatial.distance import cosine
+from scipy.spatial.distance import cosine, braycurtis
 
 
 class ExposureDescriptor:
@@ -33,3 +33,6 @@ class ExposureDescriptor:
             result = 0 if result < self._thres else 1
 
         return result
+
+    def distance_braycurtis(self, desc1, desc2):
+        return braycurtis(desc1, desc2)
