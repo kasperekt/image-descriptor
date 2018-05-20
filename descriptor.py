@@ -16,7 +16,7 @@ def trim_patch(patch, size=(20, 20)):
 
 
 def extract(image, keypoints):
-    hu_moments = HuMomentsDescriptor(patch_size=(20, 20))
+    hu_moments = HuMomentsDescriptor(patch_size=(24, 24))
     exposure = ExposureDescriptor(patch_size=(32, 32))
 
     moments_descriptors = hu_moments.extract(image, keypoints)
@@ -34,7 +34,7 @@ def extract_for_patch(patch):
     hu_moments = HuMomentsDescriptor()
     exposure = ExposureDescriptor()
 
-    moments_desc = hu_moments.extract_for_patch(trim_patch(patch, size=(20, 20)))
+    moments_desc = hu_moments.extract_for_patch(trim_patch(patch, size=(24, 24)))
     exposure_desc = exposure.extract_for_patch(patch)
 
     return Descriptor(moments_desc, exposure_desc)
@@ -44,7 +44,7 @@ def distance(desc1, desc2):
     return distance_weighted(desc1, desc2)
 
 
-def distance_weighted(desc1, desc2, w_moments=0.4, w_exposure=0.6):
+def distance_weighted(desc1, desc2, w_moments=0.25, w_exposure=0.75):
     assert(w_moments + w_exposure == 1)
 
     hu_moments = HuMomentsDescriptor()
