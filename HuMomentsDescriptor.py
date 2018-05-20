@@ -6,7 +6,7 @@ from image import get_patch
 
 
 class HuMomentsDescriptor:
-    def __init__(self, patch_size=(20, 20)):
+    def __init__(self, patch_size=(24, 24)):
         self._patch_size = patch_size
 
     def extract(self, image, keypoints):
