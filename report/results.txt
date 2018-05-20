@@ -1,0 +1,6 @@
+# Exposure
+patch_original - patch_ref = 0.06494395161139044
+patch_original - patch_wrong = 0.761956812775311
+# Hu Moments
+patch_original - patch_ref = 0.25903374317457784
+patch_original - patch_wrong = 0.7697588231982669
